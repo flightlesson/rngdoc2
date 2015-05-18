@@ -1,0 +1,58 @@
+#! /usr/bin/env bash
+JAVA=${JAVA-java}
+_scriptdir=`dirname $0`
+
+usage() {
+cat <<EOF
+`$JAVA -jar $JAR --help`
+
+Additional args include
+ -JAR jarfile           specify which rngdoc2 jar file to use
+ -v, --verbose          wrapper script verbose output
+EOF
+}
+
+findJarFile() {
+  for d in . ./target ../../../maven-targets/model-compiler $_scriptdir; do
+    for x in $d/rngdoc2-*-jar-with-dependencies.jar $d/rngdoc2*.jar; do
+      if [ -f $x ]; then
+        echo $x
+        return
+      fi
+    done
+  done
+  return
+}
+
+argv=()
+while [ -n "$1" ]; do
+  case "$1" in
+    -h | --help)
+            $JAVA -jar ${JAR:-`findJarFile`} -h
+            usage
+            exit 1
+            ;;
+    -JAR)
+            JAR=$1
+            shift
+            ;;
+    -v | --verbose)
+            verbose=verbose
+            ;;
+    *)
+            argv+=($1)
+            ;;
+  esac
+  shift
+done
+
+if [ "$JAR" = "" ]; then
+  JAR=`findJarFile`
+fi
+if [ "$JAR" = "" ]; then
+  echo "Couldn't find the rngdoc2 jar file. Specify using the '-JAR {path-to-jar-file}' command line option."
+  exit 1
+fi
+
+[ -n "$verbose" ] && echo $JAVA -jar $JAR ${argv[@]}
+[ -z "$error" ] && $JAVA -jar $JAR ${argv[@]}
