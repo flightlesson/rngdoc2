@@ -44,7 +44,6 @@ public class Rngdoc  extends OutputGenerator {
      * Starts the application.
      */
     public static void main( String[] args ) {
-
         CommandLineParser parser = new BasicParser();
         try {
             CommandLine cmd = parser.parse(options,args);

@@ -1,15 +1,20 @@
 #! /usr/bin/env bash
-JAVA=${JAVA-java}
+JAVA=${JAVA:-java}
 _scriptdir=`dirname $0`
 
 usage() {
-cat <<EOF
-`$JAVA -jar $JAR --help`
-
+  _j=${JAR:-$(findJarFile)}
+  if [ -z "$_j" ]; then
+      echo "Couldn't find the rngdoc2 jar file. Specify using the '-JAR {path-to-jar-file}' command line option."
+   else
+      $JAVA -jar $_j --help
+      cat <<EOF
 Additional args include
- -JAR jarfile           specify which rngdoc2 jar file to use
+ -JAR {path-to-rngdoc2-jarfile} specify which rngdoc2 jar file to use
  -v, --verbose          wrapper script verbose output
+ -Dlog4j.configurationFile={path-to-log4j2-config-file} 
 EOF
+  fi
 }
 
 findJarFile() {
@@ -25,10 +30,10 @@ findJarFile() {
 }
 
 argv=()
+EXTRAJAVAARGS=()
 while [ -n "$1" ]; do
   case "$1" in
     -h | --help)
-            $JAVA -jar ${JAR:-`findJarFile`} -h
             usage
             exit 1
             ;;
@@ -39,6 +44,9 @@ while [ -n "$1" ]; do
     -v | --verbose)
             verbose=verbose
             ;;
+    -D*)
+            EXTRAJAVAARGS+=$1
+            ;;
     *)
             argv+=($1)
             ;;
@@ -46,13 +54,12 @@ while [ -n "$1" ]; do
   shift
 done
 
-if [ "$JAR" = "" ]; then
-  JAR=`findJarFile`
-fi
-if [ "$JAR" = "" ]; then
-  echo "Couldn't find the rngdoc2 jar file. Specify using the '-JAR {path-to-jar-file}' command line option."
+[ -n "$JAR" ] || JAR=`findJarFile`
+if [ -z "$JAR" ]; then
+  echo "Couldn't find the rngdoc2 jar file. Specify using the '-JAR {path-to-jar-file}' command line option." >&2
   exit 1
 fi
 
-[ -n "$verbose" ] && echo $JAVA -jar $JAR ${argv[@]}
-[ -z "$error" ] && $JAVA -jar $JAR ${argv[@]}
+_cmd=$(echo $JAVA ${EXTRAJAVAARGS[@]} -jar $JAR ${argv[@]})
+[ -n "$verbose" ] && echo $_cmd
+$_cmd

@@ -19,7 +19,7 @@ abstract public class OutputGenerator {
         uriResolver = new URIResolver() {
             @Override
             public Source resolve(String href, String base) throws TransformerException {
-                logger.info("resolve(\""+href+"\",\""+base+"\")");
+                logger.debug("resolve(\""+href+"\",\""+base+"\")");
                 StreamSource stream= new StreamSource(this.getClass().getResourceAsStream("/"+href));
                 stream.setPublicId(href);
                 return stream;
