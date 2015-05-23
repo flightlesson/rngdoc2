@@ -50,4 +50,9 @@
     <xsl:include href="Simplify-7.19.xsl"/>
     <xsl:include href="Simplify-7.20.xsl"/>
     <xsl:include href="Simplify-7.22.xsl"/>
+    <!-- change <choice><oneOrMore><a/></oneOrMore><empty/></choice> to <zeroOrMore><a/></zeroOrMore> -->
+    <!-- change <choice><a/><empty/></choice>                        to <optional><a/></optional> -->
+    <!-- change <choice><choice><a/><b/></choice><c/></choice>       to <choice><a/><b/><c/></choice> -->
+    <!-- change <group><group><a/><b/></group><c/></group>           to <group><a/><b/><c/></group> -->
+    <!-- change <interleave><a/></interleave>                        to <mixed><a/></mixed> -->
 </xsl:stylesheet>
