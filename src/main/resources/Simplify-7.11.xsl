@@ -22,6 +22,12 @@
       <xsl:apply-templates mode="Simplify-7.11"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <exsl:document href="debug-Simplify-7.11.xml" method="xml" indent="no">
+        <xsl:copy-of select="$transformed"/>
+      </exsl:document>
+    </xsl:if>
+
     <xsl:choose>
       <xsl:when test="$stop-after='Simplify-7.11'">
         <xsl:copy-of select="$transformed"/>

@@ -16,29 +16,49 @@
      which seems based on the steps at https://www.oasis-open.org/committees/relax-ng/spec-20011203.html#simplification.
      Eric's script has been refactored and modified to retain <a:documentation> and <xhtml:div> comments. -->
 
+    <xsl:param name="start-at">Simplify-7.2</xsl:param>
     <xsl:param name="stop-after">Simplify-7.22</xsl:param>
     <xsl:param name="debug-level">0</xsl:param>
 
     <xsl:template match="/">
 
-      <xsl:message>debug-level is <xsl:value-of select="$debug-level"/>, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
       <xsl:if test="$debug-level > 0">
-        <xsl:message>Inside expander, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
+        <xsl:message>Simplify: start-at=<xsl:value-of select="$start-at"
+                     />, stop-after=<xsl:value-of select="$stop-after"/></xsl:message>
       </xsl:if>
 
-        <xsl:apply-templates mode="Simplify-7.2" select="/"/>
+      <xsl:choose>
+        <xsl:when test="$start-at = 'Simplify-7.03'"><xsl:apply-templates mode="Simplify-7.03" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.04'"><xsl:apply-templates mode="Simplify-7.04" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.05'"><xsl:apply-templates mode="Simplify-7.05" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.07'"><xsl:apply-templates mode="Simplify-7.07" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.08'"><xsl:apply-templates mode="Simplify-7.08" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.09'"><xsl:apply-templates mode="Simplify-7.09" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.10'"><xsl:apply-templates mode="Simplify-7.10" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.11'"><xsl:apply-templates mode="Simplify-7.11" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.12'"><xsl:apply-templates mode="Simplify-7.12" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.13'"><xsl:apply-templates mode="Simplify-7.13" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.14'"><xsl:apply-templates mode="Simplify-7.14" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.15'"><xsl:apply-templates mode="Simplify-7.15" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.16'"><xsl:apply-templates mode="Simplify-7.16" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.18'"><xsl:apply-templates mode="Simplify-7.18" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.19'"><xsl:apply-templates mode="Simplify-7.19" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.20'"><xsl:apply-templates mode="Simplify-7.20" select="/"/></xsl:when>
+        <xsl:when test="$start-at = 'Simplify-7.22'"><xsl:apply-templates mode="Simplify-7.22" select="/"/></xsl:when>
+        <xsl:otherwise>                              <xsl:apply-templates mode="Simplify-7.02" select="/"/></xsl:otherwise>
+      </xsl:choose>
 
     </xsl:template>
 
-    <!-- Each of these includes should follow the pattern established in Simplify-7.2.xsl -->
+    <!-- Each of these includes should follow the pattern established in Simplify-7.02.xsl -->
     
-    <xsl:include href="Simplify-7.2.xsl"/>
-    <xsl:include href="Simplify-7.3.xsl"/>
-    <xsl:include href="Simplify-7.4.xsl"/>
-    <xsl:include href="Simplify-7.5.xsl"/>
-    <xsl:include href="Simplify-7.7.xsl"/>
-    <xsl:include href="Simplify-7.8.xsl"/>
-    <xsl:include href="Simplify-7.9.xsl"/>
+    <xsl:include href="Simplify-7.02.xsl"/>
+    <xsl:include href="Simplify-7.03.xsl"/>
+    <xsl:include href="Simplify-7.04.xsl"/>
+    <xsl:include href="Simplify-7.05.xsl"/>
+    <xsl:include href="Simplify-7.07.xsl"/>
+    <xsl:include href="Simplify-7.08.xsl"/>
+    <xsl:include href="Simplify-7.09.xsl"/>
     <xsl:include href="Simplify-7.10.xsl"/>
     <xsl:include href="Simplify-7.11.xsl"/>
     <xsl:include href="Simplify-7.12.xsl"/>
@@ -50,9 +70,4 @@
     <xsl:include href="Simplify-7.19.xsl"/>
     <xsl:include href="Simplify-7.20.xsl"/>
     <xsl:include href="Simplify-7.22.xsl"/>
-    <!-- change <choice><oneOrMore><a/></oneOrMore><empty/></choice> to <zeroOrMore><a/></zeroOrMore> -->
-    <!-- change <choice><a/><empty/></choice>                        to <optional><a/></optional> -->
-    <!-- change <choice><choice><a/><b/></choice><c/></choice>       to <choice><a/><b/><c/></choice> -->
-    <!-- change <group><group><a/><b/></group><c/></group>           to <group><a/><b/><c/></group> -->
-    <!-- change <interleave><a/></interleave>                        to <mixed><a/></mixed> -->
 </xsl:stylesheet>

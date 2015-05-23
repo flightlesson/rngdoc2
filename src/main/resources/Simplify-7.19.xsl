@@ -22,6 +22,12 @@
       <xsl:apply-templates mode="Simplify-7.19"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <redirect:write file="debug-Simplify-7.19.xml">
+        <xsl:copy-of select="$transformed"/>
+      </redirect:write>
+    </xsl:if>
+
     <xsl:choose>
       <xsl:when test="$stop-after='Simplify-7.19'">
         <xsl:copy-of select="$transformed"/>
@@ -39,12 +45,12 @@
       <xsl:apply-templates select="@*" mode="Simplify-7.19"/>
       <xsl:copy-of select="a:documentation"/>
       <xsl:apply-templates select="rng:*" mode="Simplify-7.19"/>
-      <xsl:apply-templates select="//rng:element[not(parent::rng:define)]" mode="step7.19-define"/>
+      <xsl:apply-templates select="//rng:element[not(parent::rng:define)]" mode="Simplify-7.19-define"/>
     </xsl:copy>
   </xsl:template>
 
-  <!-- takes care of <element> whose parent was not <define> -->
-  <xsl:template mode="step7.19-define" match="rng:element">
+  <!-- create a <define> for each <element> whose parent was not <define> -->
+  <xsl:template mode="Simplify-7.19-define" match="rng:element">
     <define name="__{rng:name}-elt-{generate-id()}">
       <xsl:copy>
         <xsl:apply-templates select="@*" mode="Simplify-7.19"/>
@@ -67,8 +73,6 @@
       <xsl:apply-templates mode="Simplify-7.19"/>
     </xsl:copy>
   </xsl:template>
-
-  <xsl:template mode="Simplify-7.19" match="*"/>
 
   <!-- expand attribute <ref>s -->
   <xsl:template mode="Simplify-7.19" match="rng:ref[@name=/*/rng:define[not(rng:element)]/@name][rng:attribute]">
@@ -95,7 +99,9 @@
       <xsl:apply-templates select="@*" mode="Simplify-7.19"/>
       <xsl:copy-of select="a:documentation"/>
       <xsl:copy-of select="xhtml:div"/>
-      <xsl:apply-templates mode="Simplify-7.19"/>
+      <xsl:apply-templates select="*" mode="Simplify-7.19"/>
     </xsl:copy>
   </xsl:template>
+
+  <xsl:template mode="Simplify-7.19" match="*"/>
 </xsl:stylesheet>

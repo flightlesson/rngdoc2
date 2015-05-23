@@ -12,6 +12,7 @@
 
     <xsl:output method="xml" omit-xml-declaration="yes"/>
 
+    <xsl:param name="start-at">Normalize-010</xsl:param>
     <xsl:param name="stop-after">Normalize-020</xsl:param>
     <xsl:param name="debug-level">0</xsl:param>
 
@@ -23,6 +24,10 @@
       </xsl:if>
 
       <xsl:apply-templates mode="Normalize-010" select="/"/>
+      <xsl:choose>
+        <xsl:when test="$start-at = 'Normalize-020'"><xsl:apply-templates mode="Normalize-020" select="/"/></xsl:when>
+        <xsl:otherwise>                              <xsl:apply-templates mode="Normalize-010" select="/"/></xsl:otherwise>
+      </xsl:choose>
 
     </xsl:template>
 

@@ -10,20 +10,26 @@
                 extension-element-prefixes="redirect"
                 exclude-result-prefixes = "exsl rng">
 
-  <xsl:template mode="Simplify-7.9" match="/">
+  <xsl:template mode="Simplify-7.09" match="/">
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Simplify-7.9: next-step is Simplify-7.10, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
+      <xsl:message>Simplify-7.09: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
     </xsl:if>
     <xsl:if test="$debug-level &gt; 1">
       <xsl:message>tranforms ...</xsl:message>
     </xsl:if>
 
     <xsl:variable name="transformed">
-      <xsl:apply-templates mode="Simplify-7.9"/>
+      <xsl:apply-templates mode="Simplify-7.09"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <redirect:write file="debug-Simplify-7.09.xml">
+        <xsl:copy-of select="$transformed"/>
+      </redirect:write>
+    </xsl:if>
+
     <xsl:choose>
-      <xsl:when test="$stop-after='Simplify-7.9'">
+      <xsl:when test="$stop-after='Simplify-7.09'">
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
@@ -34,20 +40,11 @@
 
   <!-- END OF BOILERPLATE -->
 
-  <xsl:template mode="Simplify-7.9" match="rng:*|text()|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="@*" mode="Simplify-7.9"/>
-      <xsl:copy-of select="a:documentation"/>
-      <xsl:copy-of select="xhtml:div"/>
-      <xsl:apply-templates mode="Simplify-7.9"/>
-    </xsl:copy>
-  </xsl:template>
+  <xsl:template mode="Simplify-7.09" match="@name[parent::rng:element|parent::rng:attribute]"/>
 
-  <xsl:template mode="Simplify-7.9" match="@name[parent::rng:element|parent::rng:attribute]"/>
-
-  <xsl:template mode="Simplify-7.9" match="rng:element[@name]|rng:attribute[@name]">
+  <xsl:template mode="Simplify-7.09" match="rng:element[@name]|rng:attribute[@name]">
     <xsl:copy>
-      <xsl:apply-templates select="@*" mode="Simplify-7.9"/>
+      <xsl:apply-templates select="@*" mode="Simplify-7.09"/>
       <xsl:copy-of select="a:documentation"/>
       <xsl:copy-of select="xhtml:div"/>
       <xsl:if test="self::rng:attribute and not(@ns)">
@@ -56,9 +53,16 @@
       <name>
         <xsl:value-of select="@name"/>
       </name>
-      <xsl:apply-templates mode="Simplify-7.9"/>
+      <xsl:apply-templates mode="Simplify-7.09"/>
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*" mode="Simplify-7.9"/>
+  <xsl:template mode="Simplify-7.09" match="*|text()|@*">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="Simplify-7.09"/>
+      <xsl:copy-of select="a:documentation"/>
+      <xsl:copy-of select="xhtml:div"/>
+      <xsl:apply-templates mode="Simplify-7.09"/>
+    </xsl:copy>
+  </xsl:template>
 </xsl:stylesheet>

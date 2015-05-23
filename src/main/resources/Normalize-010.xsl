@@ -22,6 +22,12 @@
       <xsl:apply-templates mode="Normalize-010"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <redirect:write file="debug-Normalize-010.xml">
+        <xsl:copy-of select="$transformed"/>
+      </redirect:write>
+    </xsl:if>
+
     <xsl:choose>
       <xsl:when test="$stop-after='Normalize-010'">
         <xsl:copy-of select="$transformed"/>
@@ -34,11 +40,33 @@
 
   <!-- END OF BOILERPLATE -->
 
-  <!-- change <choice><empty/><oneOrMore>{whatever}</oneOrMore></choice> to <zeroOrMore>{whatever}</zeroOrMore> -->
-  <xsl:template mode="Normalize-010" match="rng:choice[count(*)=2 and rng:empty and rng:oneOrMore]">
-    <zeroOrMore>
-      <xsl:apply-templates select="rng:oneOrMore/*" mode="Normalize-010"/>
-    </zeroOrMore>
+  <!-- change <choice><choice><a/><b/></choice><c/></choice>       to <choice><a/><b/><c/></choice> -->
+  <!-- change <group><group><a/><b/></group><c/></group>           to <group><a/><b/><c/></group> -->
+  <xsl:template mode="Normalize-010" match="rng:choice[rng:choice] | rng:group[rng:group]">
+    <choice>
+      <xsl:call-template name="Normalize-010-flatten">
+	<xsl:with-param name="target" select="name()"/>
+        <xsl:with-param name="children" select="*"/>
+      </xsl:call-template>
+    </choice>
+  </xsl:template>
+
+  <xsl:template name="Normalize-010-flatten">
+    <xsl:param name="target"/>
+    <xsl:param name="children"/>
+    <xsl:for-each select="$children">
+      <xsl:choose>
+        <xsl:when test="name() = $target">
+          <xsl:call-template name="Normalize-010-flatten">
+	    <xsl:with-param name="target" select="$target"/>
+            <xsl:with-param name="children" select="*"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="Normalize-010"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template mode="Normalize-010" match="rng:*|text()">

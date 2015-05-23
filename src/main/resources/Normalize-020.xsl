@@ -10,9 +10,9 @@
                 extension-element-prefixes="redirect"
                 exclude-result-prefixes = "exsl rng">
 
-  <xsl:template mode="Normalize-020" match="/">
+  <xsl:template mode="Normalize-010" match="/">
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Normalize-020: next-step is ?, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
+      <xsl:message>Normalize-020: next-step is Normalize-???, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
     </xsl:if>
     <xsl:if test="$debug-level &gt; 1">
       <xsl:message>tranforms ...</xsl:message>
@@ -22,47 +22,42 @@
       <xsl:apply-templates mode="Normalize-020"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <redirect:write file="debug-Normalize-020.xml">
+        <xsl:copy-of select="$transformed"/>
+      </redirect:write>
+    </xsl:if>
+
+    <xsl:if test="$debug-level &gt; 1">
+      <exsl:document href="debug-Normalize-020.xml" method="xml" indent="no">
+        <xsl:copy-of select="$transformed"/>
+      </exsl:document>
+    </xsl:if>
+
     <xsl:choose>
       <xsl:when test="$stop-after='Normalize-020'">
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Normalize-xxx"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Normalize-030"/> 
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <!-- END OF BOILERPLATE -->
 
-  <!-- change <choice><choice><a/><b/></choice><c/></choice>       to <choice><a/><b/><c/></choice> -->
-  <!-- change <group><group><a/><b/></group><c/></group>           to <group><a/><b/><c/></group> -->
-
-  <!-- <choice><choice><choice>ab</choice>c</choice>d</choice> => <choice><choice>ab</choice>cd</choice> -->
-  <xsl:template mode="Normalize-020" match="rng:choice[rng:choice] | rng:group[rng:group]">
-    <choice>
-      <xsl:call-template name="Normalize-020-flatten">
-	<xsl:with-param name="target" select="name()"/>
-        <xsl:with-param name="children" select="*"/>
-      </xsl:call-template>
-    </choice>
+  <!-- change <choice><empty/><oneOrMore>{whatever}</oneOrMore></choice> to <zeroOrMore>{whatever}</zeroOrMore> -->
+  <xsl:template mode="Normalize-020" match="rng:choice[count(*)=2 and rng:empty and rng:oneOrMore]">
+    <zeroOrMore>
+      <xsl:apply-templates select="rng:oneOrMore/*" mode="Normalize-020"/>
+    </zeroOrMore>
   </xsl:template>
 
-  <xsl:template name="Normalize-020-flatten">
-    <xsl:param name="target"/>
-    <xsl:param name="children"/>
-    <xsl:for-each select="$children">
-      <xsl:choose>
-        <xsl:when test="name() = $target">
-          <xsl:call-template name="Normalize-020-flatten">
-	    <xsl:with-param name="target" select="$target"/>
-            <xsl:with-param name="children" select="*"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="." mode="Normalize-020"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
+  <!-- change <choice><empty/>{whatever}</choice> to <optional>{whatever}</optional> -->
+  <xsl:template mode="Normalize-020" match="rng:choice[count(*)=2 and rng:empty]">
+    <optional>
+      <xsl:apply-templates select="rng:*[not(rng:empty)]" mode="Normalize-020"/>
+    </optional>
   </xsl:template>
 
   <xsl:template mode="Normalize-020" match="rng:*|text()">
@@ -72,7 +67,5 @@
       <xsl:apply-templates mode="Normalize-020"/>
     </xsl:copy>
   </xsl:template>
-
-  <!-- change <interleave><a/></interleave>                        to <mixed><a/></mixed> -->
 
 </xsl:stylesheet>

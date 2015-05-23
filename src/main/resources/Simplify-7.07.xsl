@@ -10,24 +10,27 @@
                 extension-element-prefixes="redirect"
                 exclude-result-prefixes = "exsl rng">
 
-  <xsl:template mode="Simplify-7.7" match="/">
+  <xsl:template mode="Simplify-7.07" match="/">
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Simplify-7.7: next-step is Simplify-7.8, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
-    </xsl:if>
-    <xsl:if test="$debug-level &gt; 1">
-      <xsl:message>tranforms ...</xsl:message>
+      <xsl:message>Simplify-7.07: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
     </xsl:if>
 
     <xsl:variable name="transformed">
-      <xsl:apply-templates mode="Simplify-7.7"/>
+      <xsl:apply-templates mode="Simplify-7.07"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <redirect:write file="debug-Simplify-7.07.xml">
+        <xsl:copy-of select="$transformed"/>
+      </redirect:write>
+    </xsl:if>
+
     <xsl:choose>
-      <xsl:when test="$stop-after='Simplify-7.7'">
+      <xsl:when test="$stop-after='Simplify-7.07'">
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-7.8"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-7.08"/> 
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -36,20 +39,20 @@
 
   <!-- expand <externalRef href=""/> elements -->
 
-  <xsl:template mode="Simplify-7.7" match="rng:*|text()|@*">
+  <xsl:template mode="Simplify-7.07" match="rng:*|text()|@*">
     <xsl:copy>
-      <xsl:apply-templates select="@*" mode="Simplify-7.7"/>
+      <xsl:apply-templates select="@*" mode="Simplify-7.07"/>
       <xsl:copy-of select="a:documentation"/>
       <xsl:copy-of select="xhtml:div"/>
-      <xsl:apply-templates mode="Simplify-7.7"/>
+      <xsl:apply-templates mode="Simplify-7.07"/>
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template mode="Simplify-7.7" match="rng:externalRef">
+  <xsl:template mode="Simplify-7.07" match="rng:externalRef">
     <xsl:variable name="ref-rtf">
       <xsl:apply-templates select="document(@href)">
         <xsl:with-param name="out" select="0"/>
-        <xsl:with-param name="stop-after" select="'Simplify-7.7'"/>
+        <xsl:with-param name="stop-after" select="'Simplify-7.07'"/>
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="ref" select="exsl:node-set($ref-rtf)"/>
@@ -64,5 +67,5 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template mode="Simplify-7.7" match="*"/>
+  <xsl:template mode="Simplify-7.07" match="*"/>
 </xsl:stylesheet>

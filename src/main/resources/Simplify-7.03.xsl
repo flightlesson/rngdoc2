@@ -10,51 +10,51 @@
                 extension-element-prefixes="redirect"
                 exclude-result-prefixes = "exsl rng">
 
-  <xsl:template mode="Simplify-7.3" match="/">
+  <xsl:template mode="Simplify-7.03" match="/">
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Simplify-7.3: next-step is Simplify-7.4, stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
-    </xsl:if>
-    <xsl:if test="$debug-level &gt; 1">
-      <xsl:message>tranforms ...</xsl:message>
+      <xsl:message>Simplify-7.03: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
     </xsl:if>
 
     <xsl:variable name="transformed">
-      <xsl:apply-templates mode="Simplify-7.3"/>
+      <xsl:apply-templates mode="Simplify-7.03"/>
     </xsl:variable>
 
+    <xsl:if test="$debug-level &gt; 1">
+      <redirect:write file="debug-Simplify-7.03.xml">
+        <xsl:copy-of select="$transformed"/>
+      </redirect:write>
+    </xsl:if>
+
     <xsl:choose>
-      <xsl:when test="$stop-after='Simplify-7.3'">
+      <xsl:when test="$stop-after='Simplify-7.03'">
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-7.4"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-7.04"/> 
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <!-- END OF BOILERPLATE -->
 
-  <xsl:template mode="Simplify-7.3" match="rng:*|text()|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="@*" mode="Simplify-7.3"/>
-      <xsl:copy-of select="a:documentation"/>
-      <xsl:copy-of select="xhtml:div"/>
-      <xsl:apply-templates mode="Simplify-7.3"/>
-    </xsl:copy>
-  </xsl:template>
+  <xsl:template mode="Simplify-7.03" match="text()[normalize-space(.)='' and not(parent::rng:param or parent::rng:value)]"/>
 
-  <xsl:template mode="Simplify-7.3" match="text()[normalize-space(.)='' and not(parent::rng:param or parent::rng:value)]"/>
-
-  <xsl:template mode="Simplify-7.3" match="@name|@type|@combine">
+  <xsl:template mode="Simplify-7.03" match="@name|@type|@combine">
     <xsl:attribute name="{name()}">
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template mode="Simplify-7.3" match="rng:name/text()">
+  <xsl:template mode="Simplify-7.03" match="rng:name/text()">
     <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 
-  <xsl:template mode="Simplify-7.3" match="*"/>
+  <xsl:template mode="Simplify-7.03" match="*|text()|@*">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="Simplify-7.03"/>
+      <xsl:copy-of select="a:documentation|xhtml:div"/>
+      <xsl:apply-templates select="text()|*" mode="Simplify-7.03"/>
+    </xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>
