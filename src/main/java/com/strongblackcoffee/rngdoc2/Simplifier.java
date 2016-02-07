@@ -1,8 +1,5 @@
 package com.strongblackcoffee.rngdoc2;
 
-import static com.strongblackcoffee.rngdoc2.Rngdoc.logger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -23,7 +20,7 @@ public class Simplifier extends OutputGenerator {
             simplifierSource.setPublicId("Simplify.xsl");
             simplifier = transformerFactory.newTransformer(simplifierSource);
             simplifier.setURIResolver(uriResolver);
-            if (debugLevel != null && debugLevel.intValue() > 0) simplifier.setParameter("debug-level",debugLevel);
+            if (debugLevel != null && debugLevel > 0) simplifier.setParameter("debug-level",debugLevel);
             if (firstStep  != null && firstStep.startsWith("Simplify"))  simplifier.setParameter("start-at",firstStep);
             if (lastStep   != null && lastStep.startsWith("Simplify"))   simplifier.setParameter("stop-after",lastStep);
         } catch (TransformerConfigurationException ex) {

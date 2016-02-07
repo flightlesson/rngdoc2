@@ -1,6 +1,7 @@
 package com.strongblackcoffee.rngdoc2;
 
 import java.io.CharArrayWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.StringReader;
@@ -8,61 +9,70 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.xml.DOMConfigurator;
 
 public class Rngdoc  {
-    static Logger logger = LogManager.getLogger(Rngdoc.class.getName());
+    static Logger LOGGER = Logger.getLogger(Rngdoc.class.getName());
 
-    static final Options options = new Options();
+    static final String USAGE = "{cmd} [{args}] {schema}.rng";
+    static final String HEADER = "Generates documentation fo a Relax NG schema.\nOptions are:";
+    static final Options OPTIONS = new Options();
     static {
-        options.addOption("h","help",false,
-                "show help");
-        options.addOption("d","debug",true,
-                "debug verbosity, 2 is more verbose than 1, 0 (the default) means no debug output.");
-        options.addOption("L","last-step",true,
+        OPTIONS.addOption("h","help",false,"show help");
+        OPTIONS.addOption("d","debug",true,"debug verbosity, 2 is more verbose than 1, 0 (the default) means no debug output.");
+        OPTIONS.addOption("L","last-step",true,
                 "Stop after this step. Stopping after step Simplify prints the simplified schema. "
                 + "Stopping after step Normalize prints the simplified and normalized schema. ");
-        options.addOption("F","first-step",true,
-                "Start at this step. Provided to facilitate testing and debugging.");
+        OPTIONS.addOption("F","first-step",true,"Start at this step. Provided to facilitate testing and debugging.");
     };
-    
-    static void usage() {
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("{cmd} [{args}] {schema}.rng", 
-                            "Generates documentation for a Relax NG schema.",  // Note: will wrap if too long a line.
-                            options,
-                            "Generated documentation consists of many .html files; "
-                            +"the starting point is named index.html."); // Note: will wrap if too long a line.
-        System.exit(0);
-    }
+    static final String FOOTER = "Generates many .html files; the starting point is named index.html";
     
     /**
      * Starts the application.
      */
     public static void main( String[] args ) {
-        CommandLineParser parser = new BasicParser();
         try {
-            CommandLine cmd = parser.parse(options,args);
+            CommandLine cmdline = (new DefaultParser()).parse(OPTIONS,args);
+            if (cmdline.hasOption("help")) {
+                (new HelpFormatter()).printHelp(USAGE,HEADER,OPTIONS,FOOTER,false);
+                System.exit(1);
+            }
+            configureLogger(cmdline.getOptionValue("l4jconfig","l4j.lcf"));
             Integer debugLevel = null;
             try {
-                debugLevel = new Integer(cmd.getOptionValue("debug","0"));
+                debugLevel = new Integer(cmdline.getOptionValue("debug","0"));
             } catch (NumberFormatException x) {
-                System.out.println("Huh? debug's value is '"+cmd.getOptionValue("debug")+"'");
-                usage();
+                System.out.println("Huh? debug's value is '"+cmdline.getOptionValue("debug")+"'");
+                (new HelpFormatter()).printHelp(USAGE,HEADER,OPTIONS,FOOTER,false);
+                System.exit(1);
             }
-            Rngdoc rngdoc = new Rngdoc(debugLevel,cmd.getOptionValue("first-step"),cmd.getOptionValue("last-step"));
-            rngdoc.generateDocumentation(cmd.getArgs()[0]);
-        } catch (ParseException | ArrayIndexOutOfBoundsException x) {
-            usage();
+            Rngdoc rngdoc = new Rngdoc(debugLevel,cmdline.getOptionValue("first-step"),cmdline.getOptionValue("last-step"));
+            rngdoc.generateDocumentation(cmdline.getArgs()[0]);
+        } catch (ParseException | ArrayIndexOutOfBoundsException ex) {
+            System.err.println(ex.getMessage());
+            (new HelpFormatter()).printHelp(USAGE,HEADER,OPTIONS,FOOTER,false);
         } catch (OutputGeneratorException ex) {
-            logger.error(ex);
+              LOGGER.fatal(ex.getMessage());
+        }
+    }
+    
+    static void configureLogger(String l4jconfig) {
+        if ((new File(l4jconfig)).canRead()) {
+            if (l4jconfig.matches(".*\\.xml$")) {
+                DOMConfigurator.configureAndWatch(l4jconfig);
+            } else {
+                PropertyConfigurator.configureAndWatch(l4jconfig);
+            }
+        } else {
+            BasicConfigurator.configure();
         }
     }
     
@@ -91,7 +101,7 @@ public class Rngdoc  {
         try {
             schema = new StreamSource(new FileInputStream(pathToSchema));
         } catch (FileNotFoundException x) {
-            logger.warn(x);
+            LOGGER.warn(x);
             System.exit(1);
         }
         
