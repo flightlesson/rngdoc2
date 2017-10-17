@@ -6,20 +6,18 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.log4j.Logger;
 
 /**
  *
  */
 abstract public class OutputGenerator {
-    static Logger LOGGER = Logger.getLogger("OutputGenerator");
     
     OutputGenerator() {
         transformerFactory = TransformerFactory.newInstance("org.apache.xalan.processor.TransformerFactoryImpl",null);
         uriResolver = new URIResolver() {
             @Override
             public Source resolve(String href, String base) throws TransformerException {
-                LOGGER.debug("resolve(\""+href+"\",\""+base+"\")");
+                System.out.println("resolve(\""+href+"\",\""+base+"\")");
                 StreamSource stream= new StreamSource(this.getClass().getResourceAsStream("/"+href));
                 stream.setPublicId(href);
                 return stream;
