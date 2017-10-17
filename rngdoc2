@@ -1,7 +1,14 @@
 #! /usr/bin/env bash
-myapp=myapp
 myname=$(echo $0 | sed 's|.*/||')
 mydir=$(dirname $0 | sed 's|/$||')
+
+# TRUNK should have the Same value as TRUNK in the Makefile and trunk in pom.xml.
+# TRUNK must either be empty or end with a slash.
+TRUNK=../
+# The jar file's name matches $jarfilebasename*.jar
+jarfilebasename=rngdoc2
+# The application's main class
+mainclass=com.strongblackcoffee.rngdoc2.Rngdoc
 
 function usage() {
     cat <<- xxx
@@ -21,32 +28,46 @@ function usage() {
     exit
 }
 
-function findJarFile() for c in ./$myapp*.jar $mydir/$myapp*.jar target/$myapp-*-with-dependencies.jar; do
-                         [ -r $c ] && echo $c
-                       done
-[ -z "$MYAPPJAR" ] && MYAPPJAR=$(findJarFile)
+[ -z "$JAVA" ] &&  JAVA=$(which java)
 
-verbose=
+# The jarfile's name and location might be different during development and after installation;
+# this script should work unaltered either way.
+# Test a specific jar file by placing it in the current working directory.
+# During development the jar file is under "$(TRUNK)/maven-build-artifacts" (my preference) or "target" (maven's default).
+# After installation the jar file is in the same directory as this script.
+function findJarFile() for c in ./$jarfilebasename*.jar \
+                                ${TRUNK}maven-build-artifacts/$jarfilebasename/$jarfilebasename-*-with-dependencies.jar \
+                                target/$jarfilebasename-*-with-dependencies.jar \
+                                $mydir/$jarfilebasename*.jar; do
+                         [ -r $c ] && echo $c && return
+                       done
+
+echo "findJarFile() returned $(findJarFile)"
+
+[ -z "$MYAPPJAR" ] && MYAPPJAR=$(findJarFile || echo "did-not-find-the-jar-file")
+
+verbosity=0
 noop=
-EXTRAJAVAARGS=()
 while [ -n "$1" ]; do
   case "$1" in
-    +h) usage
-	;;
-    +v) verbose=verbose
-	;;
-    +noop) noop=noop
-	;;
-    *)  break
+    +h) usage ;;
+    +v) ((++verbosity)) ;;
+    +noop) noop=noop; verbose=noop ;;
+    +jar) echo $MYAPPJAR; exit 0 ;;
+    +main) mainclass=`shift`;;
+    *)  break ;;
   esac
   shift
 done
 
-if [ -r "$MYAPPJAR" ]; then
-  echo "Couldn't find the rngdoc2 jar file!"
+if [ ! -r "$MYAPPJAR" ]; then
+  echo "Couldn't find the jar file!"
   usage
 fi
 
-cmd="$JAVA -jar $MYAPPJAR $*"
-[ -z "$verbose" ] || echo $cmd
-[ -z "$noop" ] && exec $cmd
+# Gotta do tricks to handle command line args that contain space chars.
+cmd="$JAVA -cp $EXTRACLASSPATH:$MYAPPJAR $mainclass"
+for x in "$@"; do cmd+=" \"$x\""; done
+
+(( verbosity > 0 )) &&  echo $cmd
+[ -z "$noop" ] && eval $cmd
