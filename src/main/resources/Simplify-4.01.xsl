@@ -45,7 +45,6 @@
           rngdoc: keep a:documentation and xhtml:div elements under certain rng elements;
           rngdoc: keep @a:defaultValue attributes.
   -->
-          
 
   <xsl:template mode="Simplify-4.01" match="rng:grammar|rng:start|rng:define|rng:element|rng:attribute|rng:ref">
     <xsl:copy>

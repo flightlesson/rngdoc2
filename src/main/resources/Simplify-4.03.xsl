@@ -48,7 +48,7 @@
           nearest ancestor element that has a datatypeLibrary attribute, or the empty string if there is no such ancestor. 
           Then, any datatypeLibrary attribute that is on an element other than data or value is removed.
   -->
-  <xsl:template mode="Simplify-4.03" match="rng:data|rng:value]">
+  <xsl:template mode="Simplify-4.03" match="rng:data|rng:value">
     <xsl:copy>
       <xsl:attribute name="datatypeLibrary">
         <xsl:value-of select="ancestor-or-self::*[@datatypeLibrary][1]/@datatypeLibrary"/>

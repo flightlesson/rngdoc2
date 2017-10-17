@@ -52,7 +52,7 @@
 
   <xsl:template mode="Simplify-4.06" match="rng:externalRef">
     <xsl:variable name="ref-rtf">
-      <xsl:apply-templates select="document(@href)">
+      <xsl:apply-templates mode="Simplify-4.01" select="document(@href)">
         <xsl:with-param name="out" select="0"/>
         <xsl:with-param name="stop-after" select="'Simplify-4.06'"/>
       </xsl:apply-templates>
@@ -68,7 +68,6 @@
       <xsl:copy-of select="$ref/*/*|$ref/*/text()"/>
     </xsl:element>
   </xsl:template>
-
 
   <xsl:template mode="Simplify-4.06" match="*|text()|@*">
     <xsl:copy>
