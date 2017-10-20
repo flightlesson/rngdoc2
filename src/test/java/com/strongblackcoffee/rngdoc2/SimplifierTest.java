@@ -44,31 +44,31 @@ public class SimplifierTest {
     
     // Each test is a directory under src/test/resources
     // Each test consists of up to 4 files:
-    //   - a file named "input-data.xml"
-    //   - a file named "expected-result.xml"
+    //   - a file named "input-data.rng"
+    //   - a file named "expected-result.rng"
     //   - (optional) a file named "stop-after-{step}" where {step} names the final step.
     //   - (optional) a file named "start-at-{step}" where {step} names the first step.
     
-    public void performTest(String testDirName) {
-        System.out.println("performTest " + testDirName);
+    public void performTest(String testDirName, boolean verbose) {
+        if (verbose) System.out.println("performTest " + testDirName);
         File testDir = new File("src/test/resources/" + testDirName);
         assertTrue(testDir.getPath() + " is not a directory", testDir.isDirectory());
         assertTrue(testDir.getPath() + " is not readable", testDir.canRead());
         
         File[] files = testDir.listFiles(new FilenameFilter() {
             @Override public boolean accept(File d, String name) {
-                return "input-data.xml".equals(name);
+                return "input-data.rng".equals(name);
             }
         });
-        assertEquals("didn't find input-data.xml",1,files.length);
+        assertEquals("didn't find input-data.rng",1,files.length);
         File inputData = files[0];
         
         files = testDir.listFiles(new FilenameFilter() {
             @Override public boolean accept(File d, String name) {
-                return "expected-result.xml".equals(name);
+                return "expected-result.rng".equals(name);
             }
         });
-        assertEquals("didn't find expected-result.xml",1,files.length);
+        assertEquals("didn't find expected-result.rng",1,files.length);
         File expectedResult = files[0];
         
         String stopAfter = null;
@@ -93,10 +93,10 @@ public class SimplifierTest {
             startAt = files[0].getName().substring(9);
         }
         
-        performTest(inputData, expectedResult, startAt, stopAfter);
+        performTest(inputData, expectedResult, startAt, stopAfter, verbose);
     }
     
-    public void performTest(File inputData, File expectedResult, String startAt, String stopAfter) {
+    public void performTest(File inputData, File expectedResult, String startAt, String stopAfter, boolean verbose) {
         try {
             Simplifier instance = new Simplifier(0,startAt,stopAfter);
             Source source = new StreamSource(inputData);
@@ -105,8 +105,8 @@ public class SimplifierTest {
             instance.transform(source, result);
             String actual = resultStream.toString();
             String expected = new String(Files.readAllBytes(Paths.get(expectedResult.getPath())));
-            System.out.println("actual is " + actual);
-            System.out.println("expected is " + expected);
+            if (verbose) System.out.println("actual is " + actual);
+            if (verbose) System.out.println("expected is " + expected);
             assertThat(actual,CompareMatcher.isSimilarTo(expected).ignoreWhitespace());    
         } catch (OutputGeneratorException ex) {
             fail("couldn't create Simplifier: " + ex.getMessage());
@@ -115,6 +115,7 @@ public class SimplifierTest {
         }
     }
     
-    @Test public void test001() { performTest("Simplifier-test-001"); }
+    @Test public void test401() { performTest("Simplifier-test-4.01", false); }
+    //@Test public void test402() { performTest("Simplifier-test-4.02"); }
     
 }

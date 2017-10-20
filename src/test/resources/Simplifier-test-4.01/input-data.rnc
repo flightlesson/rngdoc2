@@ -1,0 +1,10 @@
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace dbk = "http://docbook.org/ns/docbook"
+
+start =
+  [ a:documentation [ "this is element " dbk:name [ "a" ] ] ]
+  element a {
+    
+    ## this is attribute b
+    attribute b { text }
+  }
