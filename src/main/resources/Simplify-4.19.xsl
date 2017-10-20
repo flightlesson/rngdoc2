@@ -60,7 +60,7 @@
   <xsl:template mode="Simplify-4.19" match="/rng:grammar">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|text" mode="Simplify-4.19"/>
-      <xsl:apply-templates select="//rng:element[not(parent::rng:define]" mode="Simplify-4.19-define"/>
+      <xsl:apply-templates select="//rng:element[not(parent::rng:define)]" mode="Simplify-4.19-define"/>
     </xsl:copy>
   </xsl:template>
 

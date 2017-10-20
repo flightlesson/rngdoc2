@@ -198,6 +198,7 @@
                     "/../" or "/./".
               
                  Resolution examples are provided in Appendix C.
+
   -->
   <xsl:template mode="Simplify-4.05" match="*|text()|@*">
     <xsl:copy>

@@ -45,8 +45,7 @@
   -->
   <xsl:template mode="Simplify-4.04" match="rng:value[not(@type)]">
     <value type="token" datatypeLibrary="">
-      <xsl:apply-templates select="@*" mode="Simplify-4.04"/>
-      <xsl:apply-templates mode="Simplify-4.04"/>
+      <xsl:apply-templates select="@*|*|text()" mode="Simplify-4.04"/>
     </value>
   </xsl:template>
 

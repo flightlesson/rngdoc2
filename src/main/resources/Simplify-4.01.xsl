@@ -50,13 +50,13 @@
     <xsl:copy>
       <xsl:apply-templates select="@*" mode="Simplify-4.01"/>
       <xsl:copy-of select="a:documentation|xhtml:div"/>
-      <xsl:apply-templates mode="Simplify-4.01"/>
+      <xsl:apply-templates select="*" mode="Simplify-4.01"/>
     </xsl:copy>
   </xsl:template>
 
   <xsl:template mode="Simplify-4.01" match="rng:*|text()|@*[namespace-uri()='']|@a:defaultValue">
     <xsl:copy>
-      <xsl:apply-templates select="@*|*" mode="Simplify-4.01"/>
+      <xsl:apply-templates select="@*|*|text()" mode="Simplify-4.01"/>
     </xsl:copy>
   </xsl:template>
 
