@@ -2,10 +2,10 @@ package com.strongblackcoffee.rngdoc2;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
@@ -16,10 +16,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.xmlunit.matchers.CompareMatcher;
 
 /**
  *
- * @author tsingle
  */
 public class SimplifierTest {
     
@@ -42,39 +42,79 @@ public class SimplifierTest {
     public void tearDown() {
     }
     
-    @Test
-    public void testCanReadResources() {
-        File file = new File("src/test/resources/found.txt");
-        assertTrue("found.txt should exist", file.exists());
-        assertTrue("found.txt should be readable", file.canRead());
-        assertTrue("found.txt should be a file", file.isFile());
-        //try {
-        //    System.out.println("path is " + file.getPath() + ", absolute path is " + file.getAbsolutePath() + ", canonical path is " + file.getCanonicalPath());
-        //    System.out.println("exists: " + file.exists() + ", canRead: " + file.canRead() + ", isFile: " + file.isFile());
-        //} catch (IOException ex) {
-        //    fail("IOException " + ex.getMessage());
-        //}
-        file = new File("src/test/resources/notfound.txt");
-        assertFalse("notfound.txt shouldn't exist",file.exists());
-        assertFalse("notfound.txt should not be readable", file.canRead());
-        assertFalse("notfound.txt should not be a file", file.isFile());
+    // Each test is a directory under src/test/resources
+    // Each test consists of up to 4 files:
+    //   - a file named "input-data.xml"
+    //   - a file named "expected-result.xml"
+    //   - (optional) a file named "stop-after-{step}" where {step} names the final step.
+    //   - (optional) a file named "start-at-{step}" where {step} names the first step.
+    
+    public void performTest(String testDirName) {
+        System.out.println("performTest " + testDirName);
+        File testDir = new File("src/test/resources/" + testDirName);
+        assertTrue(testDir.getPath() + " is not a directory", testDir.isDirectory());
+        assertTrue(testDir.getPath() + " is not readable", testDir.canRead());
+        
+        File[] files = testDir.listFiles(new FilenameFilter() {
+            @Override public boolean accept(File d, String name) {
+                return "input-data.xml".equals(name);
+            }
+        });
+        assertEquals("didn't find input-data.xml",1,files.length);
+        File inputData = files[0];
+        
+        files = testDir.listFiles(new FilenameFilter() {
+            @Override public boolean accept(File d, String name) {
+                return "expected-result.xml".equals(name);
+            }
+        });
+        assertEquals("didn't find expected-result.xml",1,files.length);
+        File expectedResult = files[0];
+        
+        String stopAfter = null;
+        files = testDir.listFiles(new FilenameFilter() {
+            @Override public boolean accept(File d, String name) {
+                return name.startsWith("stop-after-");
+            }
+        });
+        if (files.length > 0) {
+            assertEquals("more than one file beginning with stop-after-",1,files.length);
+            stopAfter = files[0].getName().substring(11);
+        }
+        
+        String startAt = null;
+        files = testDir.listFiles(new FilenameFilter() {
+            @Override public boolean accept(File d, String name) {
+                return name.startsWith("start-at-");
+            }
+        });
+        if (files.length > 0) {
+            assertEquals("more than one file beginning with start-at-",1,files.length);
+            startAt = files[0].getName().substring(9);
+        }
+        
+        performTest(inputData, expectedResult, startAt, stopAfter);
     }
-
-    @Test
-    public void test401() {
-        System.out.println("test401");
+    
+    public void performTest(File inputData, File expectedResult, String startAt, String stopAfter) {
         try {
-            Simplifier instance = new Simplifier(0, "Simplify-4.01", "Simplify-4.01");
-            File sourceFile = new File("src/test/resources/test401-source.rng");
-            Source source = new StreamSource(sourceFile);
+            Simplifier instance = new Simplifier(0,startAt,stopAfter);
+            Source source = new StreamSource(inputData);
             ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
             Result result = new StreamResult(resultStream);
             instance.transform(source, result);
             String actual = resultStream.toString();
-            System.out.println("result is " + actual);
+            String expected = new String(Files.readAllBytes(Paths.get(expectedResult.getPath())));
+            System.out.println("actual is " + actual);
+            System.out.println("expected is " + expected);
+            assertThat(actual,CompareMatcher.isSimilarTo(expected).ignoreWhitespace());    
         } catch (OutputGeneratorException ex) {
-            fail("Caught OutputGeneratorException " + ex.getMessage());
+            fail("couldn't create Simplifier: " + ex.getMessage());
+        } catch (IOException ex) {
+            fail("couldn't read " + expectedResult.getPath() + ": " + ex.getMessage());
         }
     }
+    
+    @Test public void test001() { performTest("Simplifier-test-001"); }
     
 }
