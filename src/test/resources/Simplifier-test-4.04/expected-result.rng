@@ -2,12 +2,12 @@
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0">
   <start>
     <element name="a">
-      <a:documentation xmlns:dbk="http://docbook.org/ns/docbook">this is element <dbk:quote>a</dbk:quote></a:documentation>
+      <a:documentation xmlns:dbk="http://docbook.org/ns/docbook">this is element <dbk:name>a</dbk:name></a:documentation>
       <attribute name="b">
         <a:documentation>this is attribute b</a:documentation>
         <choice>
-          <value>a</value>
-          <value>b</value>
+          <value type="token" datatypeLibrary="">a</value>
+          <value type="token" datatypeLibrary="">b</value>
         </choice>
       </attribute>
     </element>

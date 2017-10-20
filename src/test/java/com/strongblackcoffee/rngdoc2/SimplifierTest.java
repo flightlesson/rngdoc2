@@ -98,7 +98,7 @@ public class SimplifierTest {
     
     public void performTest(File inputData, File expectedResult, String startAt, String stopAfter, boolean verbose) {
         try {
-            Simplifier instance = new Simplifier(0,startAt,stopAfter);
+            Simplifier instance = new Simplifier(verbose?2:0,startAt,stopAfter);
             Source source = new StreamSource(inputData);
             ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
             Result result = new StreamResult(resultStream);
@@ -116,6 +116,6 @@ public class SimplifierTest {
     }
     
     @Test public void test401() { performTest("Simplifier-test-4.01", false); }
-    //@Test public void test402() { performTest("Simplifier-test-4.02"); }
+    @Test public void test404() { performTest("Simplifier-test-4.04", false); }
     
 }
