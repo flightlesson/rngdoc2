@@ -3,7 +3,7 @@
 
   <properties>
     <!-- build artifacts go in ${trunk}/maven-targets/${artifactId} -->
-    <trunk>../../..</trunk><!-- This is the src/java/actionmanager directory ... -->
+    <trunk>..</trunk>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
@@ -35,8 +35,10 @@
   </dependencies>
 
   <build>
+    <!-- build artifacts go in ${trunk}/maven-targets/${artifactId} -->
+    <directory>${trunk}/maven-targets/${project.artifactId}</directory>
+    <outputDirectory>${trunk}/maven-targets/${project.artifactId}/classes</outputDirectory>
     <plugins>
-
       <plugin>
         <!-- include dependencies in one jar file -->
         <artifactId>maven-assembly-plugin</artifactId>
