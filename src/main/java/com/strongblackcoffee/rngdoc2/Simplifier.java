@@ -1,10 +1,12 @@
 package com.strongblackcoffee.rngdoc2;
 
+import java.io.File;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
 /**
@@ -26,6 +28,11 @@ public class Simplifier extends OutputGenerator {
         } catch (TransformerConfigurationException ex) {
             throw new OutputGeneratorException("Simplifier constructor: ", ex);
         }
+    }
+    
+    void transform(Source source, Result result, String baseURI) throws OutputGeneratorException {
+        this.userBaseURI = baseURI;
+        transform(source,result);
     }
 
     @Override

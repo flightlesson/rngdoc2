@@ -30,7 +30,7 @@
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.05"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.06"/> 
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

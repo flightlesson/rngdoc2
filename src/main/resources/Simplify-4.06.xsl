@@ -51,13 +51,19 @@
   -->
 
   <xsl:template mode="Simplify-4.06" match="rng:externalRef">
+    <xsl:message>+++ <xsl:value-of select="@href"/> expands to:</xsl:message> 
+    <xsl:message><xsl:value-of select="document(@href)"/></xsl:message>
+    <xsl:message>End</xsl:message>
+      
     <xsl:variable name="ref-rtf">
       <xsl:apply-templates mode="Simplify-4.01" select="document(@href)">
-        <xsl:with-param name="out" select="0"/>
+        <xsl:with-param name="debug-level" select="2"/>
         <xsl:with-param name="stop-after" select="'Simplify-4.06'"/>
       </xsl:apply-templates>
     </xsl:variable>
+    <xsl:message>***** ref-rtf is <xsl:copy-of select="$ref-rtf"/></xsl:message>
     <xsl:variable name="ref" select="exsl:node-set($ref-rtf)"/>
+    <xsl:message>***** externalRef expands to <xsl:copy-of select="$ref"/></xsl:message>
     <xsl:element name="{local-name($ref/*)}" namespace="http://relaxng.org/ns/structure/1.0">
       <xsl:if test="not($ref/*/@ns) and @ns">
         <xsl:attribute name="ns">
