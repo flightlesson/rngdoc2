@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <ref name="person"/>
+  </start>
+  <define name="person">
+    <element name="person">
+      <element name="id">
+        <data type="int"/>
+      </element>
+      <element name="name">
+        <externalRef href="name-type.rng"/>
+      </element>
+    </element>
+  </define>
+</grammar>

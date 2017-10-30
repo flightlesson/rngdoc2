@@ -1,0 +1,9 @@
+grammar {
+  start = person
+
+  person =
+  element person {
+    element id { xsd:int },
+    element name { external "name-type.rnc" }
+  }
+}

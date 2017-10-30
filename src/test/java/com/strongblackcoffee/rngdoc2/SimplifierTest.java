@@ -102,7 +102,7 @@ public class SimplifierTest {
             Source source = new StreamSource(inputData);
             ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
             Result result = new StreamResult(resultStream);
-            instance.transform(source, result);
+            instance.transform(source, result, inputData.getParent());
             String actual = resultStream.toString();
             String expected = new String(Files.readAllBytes(Paths.get(expectedResult.getPath())));
             if (verbose) System.out.println("actual is " + actual);
@@ -117,5 +117,6 @@ public class SimplifierTest {
     
     @Test public void test401() { performTest("Simplifier-test-4.01", false); }
     @Test public void test404() { performTest("Simplifier-test-4.04", false); }
+    @Test public void test406() { performTest("Simplifier-test-4.06", true); }
     
 }
