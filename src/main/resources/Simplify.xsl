@@ -13,8 +13,10 @@
     <xsl:output method="xml" omit-xml-declaration="yes"/>
 
     <xsl:param name="start-at">Simplify-4.01</xsl:param>
-    <xsl:param name="stop-after">Simplify-4.06</xsl:param>
     <xsl:param name="debug-level">0</xsl:param>
+
+    <xsl:param name="stop-after"></xsl:param>
+    <xsl:param name="input-uri"></xsl:param>
 
     <xsl:template match="/">
 
@@ -23,27 +25,132 @@
       </xsl:if>
 
       <xsl:choose>
-        <xsl:when test="$start-at = 'Simplify-4.02'"><xsl:apply-templates mode="Simplify-4.02" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.03'"><xsl:apply-templates mode="Simplify-4.03" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.04'"><xsl:apply-templates mode="Simplify-4.04" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.05'"><xsl:apply-templates mode="Simplify-4.05" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.06'"><xsl:apply-templates mode="Simplify-4.06" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.07'"><xsl:apply-templates mode="Simplify-4.07" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.08'"><xsl:apply-templates mode="Simplify-4.08" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.09'"><xsl:apply-templates mode="Simplify-4.09" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.10'"><xsl:apply-templates mode="Simplify-4.10" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.11'"><xsl:apply-templates mode="Simplify-4.11" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.12'"><xsl:apply-templates mode="Simplify-4.12" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.13'"><xsl:apply-templates mode="Simplify-4.13" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.14'"><xsl:apply-templates mode="Simplify-4.14" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.15'"><xsl:apply-templates mode="Simplify-4.15" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.16'"><xsl:apply-templates mode="Simplify-4.16" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.17'"><xsl:apply-templates mode="Simplify-4.17" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.18'"><xsl:apply-templates mode="Simplify-4.18" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.19'"><xsl:apply-templates mode="Simplify-4.19" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.20'"><xsl:apply-templates mode="Simplify-4.20" select="/"/></xsl:when>
-        <xsl:when test="$start-at = 'Simplify-4.21'"><xsl:apply-templates mode="Simplify-4.21" select="/"/></xsl:when>
-        <xsl:otherwise>                              <xsl:apply-templates mode="Simplify-4.01" select="/"/></xsl:otherwise>
+        <xsl:when test="$start-at = 'Simplify-4.02'">
+          <xsl:apply-templates mode="Simplify-4.02" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.03'">
+          <xsl:apply-templates mode="Simplify-4.03" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.04'">
+          <xsl:apply-templates mode="Simplify-4.04" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.05'">
+          <xsl:apply-templates mode="Simplify-4.05" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.06'">
+          <xsl:apply-templates mode="Simplify-4.06" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.07'">
+          <xsl:apply-templates mode="Simplify-4.07" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.08'">
+          <xsl:apply-templates mode="Simplify-4.08" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.09'">
+	  <xsl:apply-templates mode="Simplify-4.09" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.10'">
+	  <xsl:apply-templates mode="Simplify-4.10" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.11'">
+	  <xsl:apply-templates mode="Simplify-4.11" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.12'">
+	  <xsl:apply-templates mode="Simplify-4.12" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.13'">
+	  <xsl:apply-templates mode="Simplify-4.13" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.14'">
+	  <xsl:apply-templates mode="Simplify-4.14" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.15'">
+	  <xsl:apply-templates mode="Simplify-4.15" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.16'">
+	  <xsl:apply-templates mode="Simplify-4.16" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.17'">
+	  <xsl:apply-templates mode="Simplify-4.17" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.18'">
+	  <xsl:apply-templates mode="Simplify-4.18" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.19'">
+	  <xsl:apply-templates mode="Simplify-4.19" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.20'">
+	  <xsl:apply-templates mode="Simplify-4.20" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:when test="$start-at = 'Simplify-4.21'">
+	  <xsl:apply-templates mode="Simplify-4.21" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+	</xsl:when>
+        <xsl:otherwise>                              
+          <xsl:apply-templates mode="Simplify-4.01" select="/">
+            <xsl:with-param name="stop-after" select="$stop-after"/>
+            <xsl:with-param name="input-uri" select="$input-uri"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
       </xsl:choose>
 
     </xsl:template>

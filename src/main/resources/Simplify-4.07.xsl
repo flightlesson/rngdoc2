@@ -11,8 +11,10 @@
                 exclude-result-prefixes = "exsl rng">
 
   <xsl:template mode="Simplify-4.07" match="/">
+    <xsl:param name="stop-after" select="$stop-after"/>
+    <xsl:param name="input-uri" select="$input-uri"/>
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Simplify-4.07: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
+      <xsl:message>Simplify-4.07: stop-after is <xsl:value-of select="$stop-after"/>, debug-level=<xsl:value-of select="$debug-level"/>, input-uri is <xsl:value-of select="$input-uri"/></xsl:message>
     </xsl:if>
 
     <xsl:variable name="transformed">
@@ -20,7 +22,7 @@
     </xsl:variable>
 
     <xsl:if test="$debug-level &gt; 1">
-      <redirect:write file="debug-Simplify-4.07.xml">
+      <redirect:write file="debug-Simplify-4.07{$input-uri}.xml">
         <xsl:copy-of select="$transformed"/>
       </redirect:write>
     </xsl:if>
@@ -30,7 +32,10 @@
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.08"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.08"> 
+          <xsl:with-param name="stop-after" select="$stop-after"/>
+          <xsl:with-param name="input-uri" select="$input-uri"/>
+	</xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -61,6 +66,7 @@
           children of the include element. The grammar element is then renamed to div.
   -->
   <xsl:template mode="Simplify-4.07" match="rng:include">
+    <xsl:message>Including <xsl:value-of select="@href"/></xsl:message>
     <xsl:variable name="ref-rtf">
       <xsl:apply-templates select="document(@href)">
         <xsl:with-param name="out" select="0"/>

@@ -11,6 +11,8 @@
                 exclude-result-prefixes = "exsl rng">
 
   <xsl:template mode="Simplify-4.06" match="/">
+    <xsl:param name="stop-after" select="$stop-after"/>
+    <xsl:param name="input-uri" select="$input-uri"/>
     <xsl:if test="$debug-level > 0">
       <xsl:message>Simplify-4.06: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
     </xsl:if>
@@ -20,7 +22,7 @@
     </xsl:variable>
 
     <xsl:if test="$debug-level &gt; 1">
-      <redirect:write file="debug-Simplify-4.06.xml">
+      <redirect:write file="debug-Simplify-4.06{$input-uri}.xml">
         <xsl:copy-of select="$transformed"/>
       </redirect:write>
     </xsl:if>
@@ -30,7 +32,10 @@
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.07"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.07"> 
+          <xsl:with-param name="stop-after" select="$stop-after"/>
+          <xsl:with-param name="input-uri" select="$input-uri"/>
+	</xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -51,19 +56,13 @@
   -->
 
   <xsl:template mode="Simplify-4.06" match="rng:externalRef">
-    <xsl:message>+++ <xsl:value-of select="@href"/> expands to:</xsl:message> 
-    <xsl:message><xsl:value-of select="document(@href)"/></xsl:message>
-    <xsl:message>End</xsl:message>
-      
     <xsl:variable name="ref-rtf">
       <xsl:apply-templates mode="Simplify-4.01" select="document(@href)">
-        <xsl:with-param name="debug-level" select="2"/>
         <xsl:with-param name="stop-after" select="'Simplify-4.06'"/>
+        <xsl:with-param name="input-uri" select="@href"/>
       </xsl:apply-templates>
     </xsl:variable>
-    <xsl:message>***** ref-rtf is <xsl:copy-of select="$ref-rtf"/></xsl:message>
     <xsl:variable name="ref" select="exsl:node-set($ref-rtf)"/>
-    <xsl:message>***** externalRef expands to <xsl:copy-of select="$ref"/></xsl:message>
     <xsl:element name="{local-name($ref/*)}" namespace="http://relaxng.org/ns/structure/1.0">
       <xsl:if test="not($ref/*/@ns) and @ns">
         <xsl:attribute name="ns">

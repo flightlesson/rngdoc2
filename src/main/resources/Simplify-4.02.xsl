@@ -11,8 +11,10 @@
                 exclude-result-prefixes = "exsl rng">
 
   <xsl:template mode="Simplify-4.02" match="/">
+    <xsl:param name="stop-after" select="$stop-after"/>
+    <xsl:param name="input-uri" select="$input-uri"/>
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Simplify-4.02: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
+      <xsl:message>Simplify-4.02: stop-after is <xsl:value-of select="$stop-after"/>, debug-level=<xsl:value-of select="$debug-level"/>, input-uri is <xsl:value-of select="$input-uri"/></xsl:message>
     </xsl:if>
 
     <xsl:variable name="transformed">
@@ -20,7 +22,7 @@
     </xsl:variable>
 
     <xsl:if test="$debug-level &gt; 1">
-      <redirect:write file="debug-Simplify-4.02.xml">
+      <redirect:write file="debug-Simplify-4.02{$input-uri}.xml">
         <xsl:copy-of select="$transformed"/>
       </redirect:write>
     </xsl:if>
@@ -30,7 +32,10 @@
         <xsl:copy-of select="$transformed"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.03"/> 
+        <xsl:apply-templates select="exsl:node-set($transformed)" mode="Simplify-4.03"> 
+          <xsl:with-param name="stop-after" select="$stop-after"/>
+          <xsl:with-param name="input-uri" select="$input-uri"/>
+	</xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
