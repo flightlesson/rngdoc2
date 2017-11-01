@@ -1,0 +1,6 @@
+inline = inline.class*
+
+inline.class = 
+  text
+  | element bold { inline }
+  | element italic { inline }

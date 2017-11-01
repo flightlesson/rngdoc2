@@ -1,0 +1,10 @@
+# grammar {
+  include "inline.rnc"
+  start =
+    element doc {
+      element p { inline }*
+    }
+  inline.class |=
+    element code { inline }
+    | element em { inline }
+# }
