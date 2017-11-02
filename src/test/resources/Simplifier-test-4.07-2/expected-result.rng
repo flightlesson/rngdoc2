@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-
-  <start>
-    <element name="addressBook">
-      <zeroOrMore>
-        <element name="card">
-          <ref name="cardContent"/>
-        </element>
-      </zeroOrMore>
-    </element>
-  </start>
-
+  <div>
     <define name="cardContent">
       <element name="name">
         <text/>
@@ -19,4 +9,14 @@
         <text/>
       </element>
     </define>
+    <start>
+      <element name="addressBook">
+	<zeroOrMore>
+          <element name="card">
+            <ref name="cardContent"/>
+          </element>
+	</zeroOrMore>
+      </element>
+    </start>
+  </div>
 </grammar>

@@ -115,10 +115,10 @@ public class SimplifierTest {
         }
     }
     
-    @Test public void test401() { performTest("Simplifier-test-4.01", false); }
-    @Test public void test404() { performTest("Simplifier-test-4.04", false); }
+    @Test public void test401() { performTest("Simplifier-test-4.01", true); }
+    @Test public void test404() { performTest("Simplifier-test-4.04", true); }
     @Test public void test406() { performTest("Simplifier-test-4.06", true); }
-    @Test public void test407_1() { performTest("Simplifier-test-4.07-1", false); }
+    @Test public void test407_1() { performTest("Simplifier-test-4.07-1", true); }
     @Test public void test407_2() { performTest("Simplifier-test-4.07-2", true); }
     
 }

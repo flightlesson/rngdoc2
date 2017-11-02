@@ -68,9 +68,9 @@
   <xsl:template mode="Simplify-4.07" match="rng:include">
     <xsl:message>Including <xsl:value-of select="@href"/></xsl:message>
     <xsl:variable name="ref-rtf">
-      <xsl:apply-templates select="document(@href)">
-        <xsl:with-param name="out" select="0"/>
+      <xsl:apply-templates  mode="Simplify-4.01" select="document(@href)">
         <xsl:with-param name="stop-after" select="'Simplify-4.07'"/>
+        <xsl:with-param name="input-uri" select="@href"/>
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="ref" select="exsl:node-set($ref-rtf)"/>

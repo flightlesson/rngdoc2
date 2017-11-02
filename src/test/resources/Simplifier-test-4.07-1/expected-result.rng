@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-
-  <define name="inline">
-    <zeroOrMore>
-      <ref name="inline.class"/>
-    </zeroOrMore>
-  </define>
-  <define name="inline.class">
-    <choice>
-      <text/>
-      <element name="bold">
-        <ref name="inline"/>
-      </element>
-      <element name="italic">
-        <ref name="inline"/>
-      </element>
-    </choice>
-  </define>
+  <div>
+    <define name="inline">
+      <zeroOrMore>
+	<ref name="inline.class"/>
+      </zeroOrMore>
+    </define>
+    <define name="inline.class">
+      <choice>
+	<text/>
+	<element name="bold">
+          <ref name="inline"/>
+	</element>
+	<element name="italic">
+          <ref name="inline"/>
+	</element>
+      </choice>
+    </define>
+  </div>
 
   <start>
     <element name="doc">
@@ -38,4 +39,3 @@
     </choice>
   </define>
 </grammar>
-<!-- } -->

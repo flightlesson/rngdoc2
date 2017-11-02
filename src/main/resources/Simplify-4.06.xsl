@@ -14,7 +14,7 @@
     <xsl:param name="stop-after" select="$stop-after"/>
     <xsl:param name="input-uri" select="$input-uri"/>
     <xsl:if test="$debug-level > 0">
-      <xsl:message>Simplify-4.06: stop-after is <xsl:value-of select="$stop-after"/></xsl:message>
+      <xsl:message>Simplify-4.06: stop-after is <xsl:value-of select="$stop-after"/>, debug-level=<xsl:value-of select="$debug-level"/>, input-uri is <xsl:value-of select="$input-uri"/></xsl:message>
     </xsl:if>
 
     <xsl:variable name="transformed">
