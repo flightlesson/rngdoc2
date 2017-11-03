@@ -1,22 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-  <div>
+  <div xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+    <div>
+      <start xmlns:dbk="http://docbook.org/ns/docbook">
+	<element name="addressBook">
+	  <zeroOrMore>
+	    <element name="card">
+	      <a:documentation>this is element <dbk:quote>card</dbk:quote></a:documentation>
+	      <ref name="cardContent"/>
+	    </element>
+	  </zeroOrMore>
+	</element>
+      </start>
+    </div>
     <define name="cardContent">
       <element name="name">
-        <text/>
+	<text/>
       </element>
       <element name="emailAddress">
-        <text/>
+	<text/>
       </element>
     </define>
-    <start>
-      <element name="addressBook">
-	<zeroOrMore>
-          <element name="card">
-            <ref name="cardContent"/>
-          </element>
-	</zeroOrMore>
-      </element>
-    </start>
   </div>
 </grammar>
+

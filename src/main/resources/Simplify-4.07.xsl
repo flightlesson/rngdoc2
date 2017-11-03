@@ -75,10 +75,12 @@
     </xsl:variable>
     <xsl:variable name="ref" select="exsl:node-set($ref-rtf)"/>
     <div>
-      <xsl:copy-of select="@*[name() != 'href']"/>
+      <div>
+	<xsl:copy-of select="@*[name() != 'href']"/>
+	<xsl:copy-of select="$ref/rng:grammar/rng:start[not(current()/rng:start)]"/>
+	<xsl:copy-of select="$ref/rng:grammar/rng:define[not(@name = current()/rng:define/@name)]"/>
+      </div>
       <xsl:copy-of select="*"/>
-      <xsl:copy-of select="$ref/rng:grammar/rng:start[not(current()/rng:start)]"/>
-      <xsl:copy-of select="$ref/rng:grammar/rng:define[not(@name = current()/rng:define/@name)]"/>
     </div>
   </xsl:template>
 

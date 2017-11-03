@@ -1,7 +1,11 @@
-start = 
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace dbk = "http://docbook.org/ns/docbook"
+
+start =
   element addressBook {
+    [ a:documentation [ "this is element " dbk:quote [ "card" ] ] ]
     element card { cardContent }*
   }
-cardContent = 
+cardContent =
   element name { text },
   element email { text }

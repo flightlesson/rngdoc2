@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:dbk="http://docbook.org/ns/docbook">
   <start>
     <element name="addressBook">
       <zeroOrMore>
         <element name="card">
+          <a:documentation>this is element <dbk:quote>card</dbk:quote></a:documentation>
           <ref name="cardContent"/>
         </element>
       </zeroOrMore>
